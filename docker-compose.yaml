@@ -5,13 +5,16 @@ services:
       context: ./SET-Vinsight.SourceProxy
       dockerfile: Dockerfile
     ports:
-      - "7071:80"
+      - "7071:80"  # Porta da função
+      - "3500:3500"  # Porta HTTP do Dapr sidecar
+      - "50001:50001"  # Porta gRPC do Dapr sidecar
     environment:
       - DAPR_HTTP_PORT=3500
       - AzureFunctionsJobHost__logging__console__isEnabled=true
       - WEBSITES_ENABLE_APP_SERVICE_STORAGE=false
     depends_on:
       - proxy-processor
+      - zipkin
   
   source-proxy-dapr:
     image: "daprio/daprd:latest"
@@ -24,7 +27,7 @@ services:
       "--dapr-grpc-port", "50001",
       "--placement-host-address", "placement:50006",
       "--components-path", "/components",
-      "--config", "/components/config.yaml",
+      "--config", "/components/tracing.yaml",
       "--log-level", "debug"
     ]
     volumes:
@@ -33,19 +36,23 @@ services:
     depends_on:
       - source-proxy
       - placement
+      - zipkin
   
   proxy-processor:
     build:
       context: ./SET-Vinsight.ProxyProcessor
       dockerfile: Dockerfile
     ports:
-      - "7072:80"
+      - "7072:80"  # Porta da função
+      - "3501:3501"  # Porta HTTP do Dapr sidecar
+      - "50002:50002"  # Porta gRPC do Dapr sidecar
     environment:
       - DAPR_HTTP_PORT=3501
       - AzureFunctionsJobHost__logging__console__isEnabled=true
       - WEBSITES_ENABLE_APP_SERVICE_STORAGE=false
     depends_on:
       - placement
+      - zipkin
   
   proxy-processor-dapr:
     image: "daprio/daprd:latest"
@@ -58,7 +65,7 @@ services:
       "--dapr-grpc-port", "50002",
       "--placement-host-address", "placement:50006",
       "--components-path", "/components",
-      "--config", "/components/config.yaml",
+      "--config", "/components/tracing.yaml",
       "--log-level", "debug" 
     ]
     volumes:
@@ -67,9 +74,15 @@ services:
     depends_on:
       - proxy-processor
       - placement
+      - zipkin
   
   placement:
     image: "daprio/dapr:latest"
     command: ["./placement", "-port", "50006"]
     ports:
       - "50006:50006"
+  
+  zipkin:
+    image: openzipkin/zipkin
+    ports:
+      - "9411:9411"
