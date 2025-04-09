@@ -1,0 +1,15 @@
+{
+  "profiles": {
+    "SET_Vinsight.SourceProxy": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7209"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker",
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "containerRunArguments": "--init",
+      "httpPort": 30289,
+      "useSSL": false
+    }
+  }
+}

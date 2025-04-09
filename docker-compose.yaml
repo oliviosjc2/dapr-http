@@ -1,0 +1,69 @@
+version: '3.4'
+services:
+  source-proxy:
+    build:
+      context: ./SET-Vinsight.SourceProxy
+      dockerfile: Dockerfile
+    ports:
+      - "7071:80"
+    environment:
+      - DAPR_HTTP_PORT=3500
+      - AzureFunctionsJobHost__logging__console__isEnabled=true
+      # Esta variável permite que as Functions sejam descobertas corretamente
+      - WEBSITES_ENABLE_APP_SERVICE_STORAGE=false
+    depends_on:
+      - proxy-processor
+  
+  source-proxy-dapr:
+    image: "daprio/daprd:latest"
+    command: [
+      "./daprd",
+      "--app-id", "source-proxy",
+      "--app-port", "80",
+      "--app-protocol", "http",  # Especificar o protocolo explicitamente
+      "--dapr-http-port", "3500",
+      "--dapr-grpc-port", "50001",
+      "--placement-host-address", "placement:50006",
+      "--log-level", "debug"
+    ]
+    network_mode: "service:source-proxy"
+    depends_on:
+      - source-proxy
+      - placement
+  
+  proxy-processor:
+    build:
+      context: ./SET-Vinsight.ProxyProcessor
+      dockerfile: Dockerfile
+    ports:
+      - "7072:80"
+    environment:
+      - DAPR_HTTP_PORT=3501
+      - AzureFunctionsJobHost__logging__console__isEnabled=true
+      # Esta variável permite que as Functions sejam descobertas corretamente
+      - WEBSITES_ENABLE_APP_SERVICE_STORAGE=false
+    depends_on:
+      - placement
+  
+  proxy-processor-dapr:
+    image: "daprio/daprd:latest"
+    command: [
+      "./daprd",
+      "--app-id", "proxy-processor",
+      "--app-port", "80",
+      "--app-protocol", "http",  # Especificar o protocolo explicitamente
+      "--dapr-http-port", "3501",
+      "--dapr-grpc-port", "50002",
+      "--placement-host-address", "placement:50006",
+      "--log-level", "debug" 
+    ]
+    network_mode: "service:proxy-processor"
+    depends_on:
+      - proxy-processor
+      - placement
+  
+  placement:
+    image: "daprio/dapr:latest"
+    command: ["./placement", "-port", "50006"]
+    ports:
+      - "50006:50006"
