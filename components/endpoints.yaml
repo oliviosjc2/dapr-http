@@ -1,0 +1,9 @@
+apiVersion: dapr.io/v1alpha1
+kind: Configuration
+metadata:
+  name: endpoints
+spec:
+  httpPipeline:
+    handlers:
+    - name: logging
+      type: middleware.http.logging

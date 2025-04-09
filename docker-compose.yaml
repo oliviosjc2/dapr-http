@@ -9,7 +9,6 @@ services:
     environment:
       - DAPR_HTTP_PORT=3500
       - AzureFunctionsJobHost__logging__console__isEnabled=true
-      # Esta variável permite que as Functions sejam descobertas corretamente
       - WEBSITES_ENABLE_APP_SERVICE_STORAGE=false
     depends_on:
       - proxy-processor
@@ -20,12 +19,16 @@ services:
       "./daprd",
       "--app-id", "source-proxy",
       "--app-port", "80",
-      "--app-protocol", "http",  # Especificar o protocolo explicitamente
+      "--app-protocol", "http",
       "--dapr-http-port", "3500",
       "--dapr-grpc-port", "50001",
       "--placement-host-address", "placement:50006",
+      "--components-path", "/components",
+      "--config", "/components/config.yaml",
       "--log-level", "debug"
     ]
+    volumes:
+      - "./components:/components"
     network_mode: "service:source-proxy"
     depends_on:
       - source-proxy
@@ -40,7 +43,6 @@ services:
     environment:
       - DAPR_HTTP_PORT=3501
       - AzureFunctionsJobHost__logging__console__isEnabled=true
-      # Esta variável permite que as Functions sejam descobertas corretamente
       - WEBSITES_ENABLE_APP_SERVICE_STORAGE=false
     depends_on:
       - placement
@@ -51,12 +53,16 @@ services:
       "./daprd",
       "--app-id", "proxy-processor",
       "--app-port", "80",
-      "--app-protocol", "http",  # Especificar o protocolo explicitamente
+      "--app-protocol", "http",
       "--dapr-http-port", "3501",
       "--dapr-grpc-port", "50002",
       "--placement-host-address", "placement:50006",
+      "--components-path", "/components",
+      "--config", "/components/config.yaml",
       "--log-level", "debug" 
     ]
+    volumes:
+      - "./components:/components"
     network_mode: "service:proxy-processor"
     depends_on:
       - proxy-processor

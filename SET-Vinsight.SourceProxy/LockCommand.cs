@@ -29,10 +29,11 @@ namespace SET_Vinsight.SourceProxy
 
             var messageData = new
             {
-                message = data?.message ?? "Object created inside SET-Vinsight.SourceProxy :: LockCommand"
+		operation = "create",
+                data = data?.message ?? "Object created inside SET-Vinsight.SourceProxy :: LockCommand"
             };
 
-            var daprUrl = $"http://localhost:{daprPort}/v1.0/invoke/proxy-processor/method/api/process-lock";
+	    var daprUrl = $"http://localhost:{daprPort}/v1.0/bindings/service-invocation";
             var content = new StringContent(JsonConvert.SerializeObject(messageData), Encoding.UTF8, "application/json");
 
             _logger.LogInformation($"Calling ProxyProcessor via Dapr at: {daprUrl}");

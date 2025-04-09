@@ -1,0 +1,12 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: service-invocation
+spec:
+  type: bindings.http
+  version: v1
+  metadata:
+  - name: url
+    value: http://proxy-processor/api/process-lock
+  - name: method
+    value: POST

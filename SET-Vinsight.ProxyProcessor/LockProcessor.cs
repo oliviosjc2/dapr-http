@@ -20,16 +20,10 @@ namespace SET_Vinsight.ProxyProcessor
         {
             _logger.LogInformation("ProcessLock received a request");
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic? data = JsonConvert.DeserializeObject(requestBody);
-
-            string? message = data?.message;
-            _logger.LogInformation($"Received message: {message}");
-
             return new OkObjectResult(new
             {
-                receivedMessage = message,
-                response = $"ProcessLock processed your message: {message}",
+                receivedMessage = "message",
+                response = $"ProcessLock processed your message!",
                 timestamp = DateTime.UtcNow
             });
         }

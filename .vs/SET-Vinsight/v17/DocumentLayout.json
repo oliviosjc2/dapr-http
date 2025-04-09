@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\POC\\SET-Vinsight\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{5686B1A7-A86C-4B45-8E0D-DBABA85F933B}|SET-Vinsight.ProxyProcessor\\SET-Vinsight.ProxyProcessor.csproj|c:\\poc\\set-vinsight\\set-vinsight.proxyprocessor\\lockprocessor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5686B1A7-A86C-4B45-8E0D-DBABA85F933B}|SET-Vinsight.ProxyProcessor\\SET-Vinsight.ProxyProcessor.csproj|solutionrelative:set-vinsight.proxyprocessor\\lockprocessor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "LockProcessor.cs",
+              "DocumentMoniker": "C:\\POC\\SET-Vinsight\\SET-Vinsight.ProxyProcessor\\LockProcessor.cs",
+              "RelativeDocumentMoniker": "SET-Vinsight.ProxyProcessor\\LockProcessor.cs",
+              "ToolTip": "C:\\POC\\SET-Vinsight\\SET-Vinsight.ProxyProcessor\\LockProcessor.cs",
+              "RelativeToolTip": "SET-Vinsight.ProxyProcessor\\LockProcessor.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABcAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T01:23:40.81Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
