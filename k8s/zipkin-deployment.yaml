@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proxy-processor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: proxy-processor
+  template:
+    metadata:
+      labels:
+        app: proxy-processor
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "proxy-processor"
+        dapr.io/app-port: "80"
+        dapr.io/app-protocol: "http"
+        dapr.io/log-level: "debug"
+        dapr.io/config: "tracing"
+    spec:
+      containers:
+      - name: proxy-processor
+        image: proxy-processor:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 80
+        env:
+        - name: AzureFunctionsJobHost__logging__console__isEnabled
+          value: "true"
+        - name: WEBSITES_ENABLE_APP_SERVICE_STORAGE
+          value: "false"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: proxy-processor
+spec:
+  selector:
+    app: proxy-processor
+  ports:
+  - port: 80
+    targetPort: 80
+  type: ClusterIP

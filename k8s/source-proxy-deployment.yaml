@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: source-proxy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: source-proxy
+  template:
+    metadata:
+      labels:
+        app: source-proxy
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "source-proxy"
+        dapr.io/app-port: "80"
+        dapr.io/app-protocol: "http"
+        dapr.io/log-level: "debug"
+        dapr.io/config: "tracing"
+    spec:
+      containers:
+      - name: source-proxy
+        image: source-proxy:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 80
+        env:
+        - name: AzureFunctionsJobHost__logging__console__isEnabled
+          value: "true"
+        - name: WEBSITES_ENABLE_APP_SERVICE_STORAGE
+          value: "false"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: source-proxy
+spec:
+  selector:
+    app: source-proxy
+  ports:
+  - port: 80
+    targetPort: 80
+  type: ClusterIP

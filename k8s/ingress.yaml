@@ -1,0 +1,31 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: dapr-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /source-proxy(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: source-proxy
+            port:
+              number: 80
+      - path: /proxy-processor(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: proxy-processor
+            port:
+              number: 80
+      - path: /zipkin(/|$)(.*)
+        pathType: Prefix
+        backend:
+          service:
+            name: zipkin
+            port:
+              number: 9411
